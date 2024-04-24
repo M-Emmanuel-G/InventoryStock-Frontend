@@ -1,0 +1,121 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id    String          @id @default(uuid())
+  email String          @unique
+  name  String
+  password String
+  role String @default("normal")
+  report Report[]
+}
+
+model Products{
+  id String @id @default(uuid())
+  cod_product String @unique
+  product String
+  qtd_stock Decimal @db.Decimal(10,2) @default(0)
+  price Decimal @db.Decimal(10,2)
+  total_value Decimal @db.Decimal(10,2)
+  entry_time String
+  sales_percentage Decimal @db.Decimal(10,2) @default(1.25)
+  product_entries ProductEntries[]
+  report Report[]
+  OutputProducts OutputProducts[]
+}
+
+model Suppliers{
+  id String @id @default(cuid())
+  supplier String 
+  cod_supplier Int @unique @default(autoincrement())
+  cnpj String @unique
+  status String 
+  Address String
+  contact String
+  email String @unique
+  product_entries ProductEntries[]
+  report Report[]
+}
+
+model ProductEntries{
+  id String @id @default(cuid())
+  cod_entries Int @unique @default(autoincrement())
+  qtd Decimal @db.Decimal(10,2)
+  note_value Decimal @db.Decimal(10,2)
+  price Decimal @db.Decimal(10,2)
+  date String
+
+  product_id String
+  product Products @relation(fields: [product_id], references: [id])
+
+  supplier_id String
+  supplier Suppliers @relation(fields: [supplier_id], references: [id])
+}
+
+model Report{
+  id String @id @default(cuid())
+
+  product_id String
+  product Products @relation(fields: [product_id], references: [id])
+
+  supplier_id String
+  supplier Suppliers @relation(fields: [supplier_id], references: [id])
+
+  user_id String
+  users Users @relation(fields: [user_id], references: [id])
+
+  release_id String
+  release ProductsRelease @relation(fields: [release_id], references: [id])
+
+  clients_id String
+  clients Clients @relation(fields: [clients_id], references: [id])
+
+}
+
+model ProductsRelease{`
+  id String @id @default(cuid())
+  cod_release Int @unique @default(autoincrement())
+  qtd Decimal @db.Decimal(10,2)
+  note_value Decimal @db.Decimal(10,2)
+  price Decimal @db.Decimal(10,2)
+  date String
+  report Report[]
+}
+
+model Clients{
+  id String @id @default(cuid())
+  cod_client Int @unique @default(autoincrement())
+  name String
+  address String
+  available Boolean @default(false)
+  email String
+  contact String
+  report Report[]
+  OutputProducts OutputProducts[]
+}
+
+model OutputProducts{
+  id String @id @default(cuid())
+  cod_output Int @default(autoincrement())
+  date_output String
+  qtd_purchase Int
+
+  clientsID String @unique
+  clients Clients @relation(fields: [clientsID], references: [id])
+
+  productID String @unique
+  products Products @relation(fields: [productID], references: [id])
+
+}
