@@ -22,10 +22,10 @@ import { BASE_URL } from "../../_Constants/URL";
 
   export default function DialogDelete({id}:DeleteProps) {
 
-    const {data : session} = useSession()
+    const session = useSession()
    
     const delProduct = ()=>{
-        axios.delete(`${BASE_URL}products/removeProduct/${id}`)
+        axios.delete(`${BASE_URL}products/removeProduct/${id}/userID:${session.data?.user.id}`)
             .then((res)=>{
                 alert(res.data)
             })

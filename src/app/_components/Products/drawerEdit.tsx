@@ -15,6 +15,7 @@ import { Pencil } from "lucide-react";
 import { useState } from "react";
 import { BASE_URL } from "../../_Constants/URL";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 interface EditProps{
     id:string
@@ -23,6 +24,7 @@ interface EditProps{
 export default function EditProduct({id}:EditProps) {
 
 const router = useRouter()
+const session = useSession()
 
 const [price, setPrice] = useState<number>(0) 
 const [qtd, setQtd] = useState<number>(0) 
@@ -36,7 +38,7 @@ const [percentage, setPercentage] = useState<number>(0)
         product,
     }
 
-    axios.patch(`${BASE_URL}products/update/${id}`, body)
+    axios.patch(`${BASE_URL}products/update/${id}/userID:${session.data?.user.id}`, body)
         .then((res)=>{
             alert(res.data.message)
             router.push("/Products")
