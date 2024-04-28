@@ -70,9 +70,9 @@ export default function Header() {
                         <Link className="my-4 text-xl" href="/Suppliers">
                             <strong>Fornecedores</strong>
                         </Link>
-                        {/* <Link className="my-4 text-xl" href="/Dashboard">
-                            <strong>Histórico de movimentaçôes</strong>
-                        </Link> */}
+                        <Link className="my-4 text-xl" href="/AuditLog">
+                            <strong>Auditoria</strong>
+                        </Link>
                     </SheetDescription>
                     <SheetDescription className=" w-full items-center flex flex-col">
                         <Button className="my-4 w-[200px] h-[30px] text-xl" onClick={()=>{signOut({ callbackUrl: '/' })}}>Sair</Button>
