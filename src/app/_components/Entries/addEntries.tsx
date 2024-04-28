@@ -15,10 +15,13 @@ import { Button } from "@/components/ui/button";
      
 import { Input } from "@/components/ui/input";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
   
 
 export default function AddEntries() {
+
+    const session = useSession()
 
     const [qtd,setQtd] = useState<number>(0)
     const [price,setPrice] = useState<number>(0)
@@ -49,7 +52,7 @@ export default function AddEntries() {
         }
 
         axios
-            .post(`${BASE_URL}Entries/makeEntry/productID/${productID}/supplierID/${supplierID}`, body)
+            .post(`${BASE_URL}Entries/makeEntry/productID/${productID}/supplierID/${supplierID}/userID:${session.data?.user.id}`, body)
             .then((res)=>{
                 alert(res.data.message)
                 console.log(res.data);
