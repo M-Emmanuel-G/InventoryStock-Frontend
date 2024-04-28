@@ -38,7 +38,7 @@ export default function AddSupplier() {
         }
 
         axios
-            .post(`${BASE_URL}suppliers/create/userID:${session.data?.user.id}`, body)
+            .post(`${BASE_URL}suppliers/create/userID/${session.data?.user.id}`, body)
             .then((res)=>{
                 alert(res.data.message)
             })

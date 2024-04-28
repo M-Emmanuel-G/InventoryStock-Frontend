@@ -52,7 +52,7 @@ export default function AddEntries() {
         }
 
         axios
-            .post(`${BASE_URL}Entries/makeEntry/productID/${productID}/supplierID/${supplierID}/userID:${session.data?.user.id}`, body)
+            .post(`${BASE_URL}Entries/makeEntry/productID/${productID}/supplierID/${supplierID}/userID/${session.data?.user.id}`, body)
             .then((res)=>{
                 alert(res.data.message)
                 console.log(res.data);

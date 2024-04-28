@@ -38,7 +38,7 @@ export default function RemoveClientComp({id}:RemoveProps) {
     const remove = async ()=>{
 
         axios
-            .delete(`${BASE_URL}Clients/delete/clientID/${id}/userID:${session.data?.user.id}`)
+            .delete(`${BASE_URL}Clients/delete/clientID/${id}/userID/${session.data?.user.id}`)
             .then(res=> alert(res.data.message))
             .catch(err=>alert(err.response.data))
 

@@ -36,7 +36,7 @@ export default function AddProducts({page}:PageProps) {
         }
 
         axios
-            .post(`${BASE_URL}products/addproducts/userID:${session.data?.user.id}`, body)
+            .post(`${BASE_URL}products/addproducts/userID/${session.data?.user.id}`, body)
             .then((res)=>{
                 alert(res.data)
             })

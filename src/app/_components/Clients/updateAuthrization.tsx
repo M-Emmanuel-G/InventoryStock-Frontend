@@ -67,7 +67,7 @@ export default function UpdateClient({id, client}:UpdateProps) {
       }
 
       axios
-        .patch(`${BASE_URL}clients/update/clientID/${id}/userID:${session.data?.user.id}`, body )
+        .patch(`${BASE_URL}clients/update/clientID/${id}/userID/${session.data?.user.id}`, body )
         .then((res)=>{
           alert(res.data.message)
         })

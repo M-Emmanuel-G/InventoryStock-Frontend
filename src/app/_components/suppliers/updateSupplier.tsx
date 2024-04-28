@@ -58,7 +58,7 @@ export default function UpdateSupplier({id, supplier}:UpdateProps) {
       }
 
       axios
-        .patch(`${BASE_URL}suppliers/update/supplierID/${id}/userID:${session.data?.user.id}`, body )
+        .patch(`${BASE_URL}suppliers/update/supplierID/${id}/userID/${session.data?.user.id}`, body )
         .then((res)=>{
             alert(res.data.message)
         })

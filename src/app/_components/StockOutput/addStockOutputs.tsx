@@ -47,7 +47,7 @@ export default function SaveOutput() {
         }
 
         axios
-            .post(`${BASE_URL}outputs/create/clientID/${client}/productID/${product}/userID:${session.data?.user.id}`, body)
+            .post(`${BASE_URL}outputs/create/clientID/${client}/productID/${product}/userID/${session.data?.user.id}`, body)
             .then((res)=>{
                 alert(res.data.message)
             })

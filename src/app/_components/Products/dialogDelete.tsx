@@ -25,7 +25,7 @@ import { BASE_URL } from "../../_Constants/URL";
     const session = useSession()
    
     const delProduct = ()=>{
-        axios.delete(`${BASE_URL}products/removeProduct/${id}/userID:${session.data?.user.id}`)
+        axios.delete(`${BASE_URL}products/removeProduct/${id}/userID/${session.data?.user.id}`)
             .then((res)=>{
                 alert(res.data)
             })

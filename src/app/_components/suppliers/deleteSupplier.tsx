@@ -30,7 +30,7 @@ export default function RemoveSupplier({id, supplier}:RemoveProps) {
     const remove = async ()=>{
 
         axios
-            .delete(`${BASE_URL}Suppliers/delete/supplierID/${id}/userID:${session.data?.user.id}`)
+            .delete(`${BASE_URL}Suppliers/delete/supplierID/${id}/userID/${session.data?.user.id}`)
             .then(res=> alert(res.data.message))
             .catch(err=>alert(err.response.data))
 
