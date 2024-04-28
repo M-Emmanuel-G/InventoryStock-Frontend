@@ -14,21 +14,65 @@ datasource db {
 }
 
 model Users {
-  id    String          @id @default(uuid())
-  email String          @unique
-  name  String
-  password String
-  role String @default("normal")
-  report Report[]
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  image         String?
+  password      String
+  accounts      Account[]
+  sessions      Session[]
+  reports       Report[]
+  // Optional for WebAuthn support
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+  user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@id([provider, providerAccountId])
+}
+ 
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         Users     @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+ 
+  @@id([identifier, token])
 }
 
 model Products{
   id String @id @default(uuid())
-  cod_product String @unique
+  cod_product Int @default(autoincrement())
   product String
-  qtd_stock Decimal @db.Decimal(10,2) @default(0)
+  qtd_stock Int @default(0)
   price Decimal @db.Decimal(10,2)
-  total_value Decimal @db.Decimal(10,2)
   entry_time String
   sales_percentage Decimal @db.Decimal(10,2) @default(1.25)
   product_entries ProductEntries[]
@@ -41,7 +85,6 @@ model Suppliers{
   supplier String 
   cod_supplier Int @unique @default(autoincrement())
   cnpj String @unique
-  status String 
   Address String
   contact String
   email String @unique
@@ -84,13 +127,13 @@ model Report{
 
 }
 
-model ProductsRelease{`
+model ProductsRelease{
   id String @id @default(cuid())
   cod_release Int @unique @default(autoincrement())
   qtd Decimal @db.Decimal(10,2)
   note_value Decimal @db.Decimal(10,2)
   price Decimal @db.Decimal(10,2)
-  date String
+  date String 
   report Report[]
 }
 
@@ -108,14 +151,22 @@ model Clients{
 
 model OutputProducts{
   id String @id @default(cuid())
-  cod_output Int @default(autoincrement())
+  cod_output Int @default(autoincrement()) @unique
   date_output String
   qtd_purchase Int
 
-  clientsID String @unique
+  clientsID String
   clients Clients @relation(fields: [clientsID], references: [id])
 
-  productID String @unique
+  productID String
   products Products @relation(fields: [productID], references: [id])
 
+}
+
+model AuditLog{
+  id String @id @default(cuid())
+  cod_audit Int @default(autoincrement())
+  user String
+  changed String
+  date String
 }

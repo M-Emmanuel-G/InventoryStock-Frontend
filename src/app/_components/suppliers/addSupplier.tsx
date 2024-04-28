@@ -13,9 +13,12 @@ import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { useState } from "react";
 import { BASE_URL } from "../../_Constants/URL";
+import { useSession } from "next-auth/react";
   
 
 export default function AddSupplier() {
+
+    const session = useSession()
 
     const [supplierName, setSupplierName ] = useState<string>("")
     const [address, setAddress ] = useState<string>("")
@@ -35,7 +38,7 @@ export default function AddSupplier() {
         }
 
         axios
-            .post(`${BASE_URL}suppliers/create`, body)
+            .post(`${BASE_URL}suppliers/create/userID/${session.data?.user.id}`, body)
             .then((res)=>{
                 alert(res.data.message)
             })

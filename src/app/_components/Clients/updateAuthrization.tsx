@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Pencil } from "lucide-react";
 import axios from "axios";
 import { BASE_URL } from "../../_Constants/URL";
+import { useSession } from "next-auth/react";
 
 interface UpdateProps{
   id:string,
@@ -35,6 +36,8 @@ export default function UpdateClient({id, client}:UpdateProps) {
     const [address, setAddress ] = useState<string>("")
     const [email, setEmail ] = useState<string>("")
     const [contact, setContact ] = useState<string>("")
+
+    const session = useSession()
 
     const verifyAuthorization = ()=>{
       if(available === "authorized") return true
@@ -64,7 +67,7 @@ export default function UpdateClient({id, client}:UpdateProps) {
       }
 
       axios
-        .patch(`${BASE_URL}clients/update/clientID/${id}`, body )
+        .patch(`${BASE_URL}clients/update/clientID/${id}/userID/${session.data?.user.id}`, body )
         .then((res)=>{
           alert(res.data.message)
         })

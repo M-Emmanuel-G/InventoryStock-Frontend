@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Pencil } from "lucide-react";
 import axios from "axios";
 import { BASE_URL } from "../../_Constants/URL";
+import { useSession } from "next-auth/react";
 
 interface UpdateProps{
   id:string
@@ -28,7 +29,9 @@ interface UpdateProps{
 } 
 
 export default function UpdateSupplier({id, supplier}:UpdateProps) {
-    
+  
+    const session = useSession()
+
     const [supplierName, setSupplierName ] = useState<string>("")
     const [address, setAddress ] = useState<string>("")
     const [email, setEmail ] = useState<string>("")
@@ -55,7 +58,7 @@ export default function UpdateSupplier({id, supplier}:UpdateProps) {
       }
 
       axios
-        .patch(`${BASE_URL}suppliers/update/supplierID/${id}`, body )
+        .patch(`${BASE_URL}suppliers/update/supplierID/${id}/userID/${session.data?.user.id}`, body )
         .then((res)=>{
             alert(res.data.message)
         })
