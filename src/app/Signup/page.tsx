@@ -31,7 +31,7 @@ export default function SignUp() {
                 alert(res.data.message)
                 router.push("/")
             })
-            .catch((err)=>{alert(err.response.data)})
+            .catch((err)=>{console.log(err)})
     }
 
     return (

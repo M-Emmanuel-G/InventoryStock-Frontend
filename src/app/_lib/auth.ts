@@ -1,44 +1,61 @@
-import NextAuth from "next-auth"
+import NextAuth, { AuthOptions } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import { db } from "./prisma"
-import { signIn } from "next-auth/react"
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { Adapter } from "next-auth/adapters"
 
-export const authOptions = {
+export const authOptions: AuthOptions = {
   // Configure one or more authentication providers
+
     pages:{
         signIn:"/Login"    
     },
+    
     providers: [
+        
     Credentials({
         name:"Credentials",
         credentials:{
             email:{label:"Insira seu email", type:"text"},
-            password:{label:"Insira seu email", type:"text"},
         },
+        
         async authorize(credentials){
             const user = await db.users.findUnique({
                 where:{
-                    email: credentials?.email,
-                    password: credentials?.password
+                    email: credentials?.email
                 }
             })
+             
+            if(!user) return null
 
-            if(user){
-                return user
-            } else{ 
-                return null
+            return  {
+                id: user.id,
+                userName: user.createdAt
             }
+            
+         
         }
     })
-  
     ],
-    
-    // callbacks:{
-    //     async signIn() {
-    //         return '/Dashboard';
-    //     }
-    // },
 
+    callbacks: {
+        session: async ({ session, token }) => {
+          if (session?.user) {
+            session.user.id = token.sub as string
+          }
+          return session;
+        },
+        jwt: async ({ user, token }) => {
+          if (user) {
+            token.uid = user.id;
+          }
+          return token;
+        },
+      },
+      session: {
+        strategy: 'jwt',
+      },
+    
     secret: "asdasjdpkasndio0aspfdsaf46.dfh45fdg1h89gsf123fd1g065153412345651asdaasdsdas65321",
 }
 

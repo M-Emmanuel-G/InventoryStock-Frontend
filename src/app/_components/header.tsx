@@ -19,10 +19,12 @@ import { useEffect } from "react";
 export default function Header() {
 
     const router = useRouter()
-    const session = useSession()
+    const { data: session, status } = useSession()
+    
+    
 
     useEffect(()=>{
-        if(session.status === "unauthenticated"){
+        if(status === "unauthenticated"){
             router.push("/")
         }else{
             router.refresh()
@@ -32,7 +34,7 @@ export default function Header() {
     return (
         <header className="w-full h-[10%] flex justify-end items-center bg-slate-300">
             <div>
-                <strong>Bem vindo, {session.data?.user?.name}</strong>
+                <strong>Bem vindo, {session?.user?.name}</strong>
             </div>
             <Sheet>
                 <SheetTrigger>
