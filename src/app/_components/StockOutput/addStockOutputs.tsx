@@ -14,9 +14,11 @@ import axios from "axios";
 import { useState } from "react";
 import { BASE_URL } from "../../_Constants/URL";
 import useRequestData from "@/app/_hooks/useRequestData";
+import { useSession } from "next-auth/react";
   
 export default function SaveOutput() {
 
+    const session = useSession()
   
     const [client, setClient ] = useState<string>("")
     const [product, setProduct ] = useState<string>("")
@@ -45,7 +47,7 @@ export default function SaveOutput() {
         }
 
         axios
-            .post(`${BASE_URL}outputs/create/clientID/${client}/productID/${product}`, body)
+            .post(`${BASE_URL}outputs/create/clientID/${client}/productID/${product}/userID:${session.data?.user.id}`, body)
             .then((res)=>{
                 alert(res.data.message)
             })
