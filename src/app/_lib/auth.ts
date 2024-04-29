@@ -1,8 +1,6 @@
 import NextAuth, { AuthOptions } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import { db } from "./prisma"
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import { Adapter } from "next-auth/adapters"
 
 export const authOptions: AuthOptions = {
   // Configure one or more authentication providers
@@ -17,37 +15,36 @@ export const authOptions: AuthOptions = {
         name:"Credentials",
         credentials:{
             email:{label:"Insira seu email", type:"text"},
+            // password:{label:"Insira sua senha", type:"password"},
+            
         },
         
         async authorize(credentials){
             const user = await db.users.findUnique({
                 where:{
-                    email: credentials?.email
+                    email: credentials?.email,
                 }
             })
              
             if(!user) return null
 
-            return  {
-                id: user.id,
-                userName: user.createdAt
-            }
-            
-         
-        }
-    })
+            return user
+          }
+      })
     ],
 
     callbacks: {
         session: async ({ session, token }) => {
           if (session?.user) {
             session.user.id = token.sub as string
+            session.user.name = token.name as string
           }
           return session;
         },
         jwt: async ({ user, token }) => {
           if (user) {
             token.uid = user.id;
+            token.name = user.name
           }
           return token;
         },

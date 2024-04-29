@@ -38,7 +38,7 @@ const [percentage, setPercentage] = useState<number>(0)
         product,
     }
 
-    axios.patch(`${BASE_URL}products/update/${id}/userID/${session.data?.user.id}`, body)
+    axios.patch(`${BASE_URL}products/update/productID/${id}/userID/${session.data?.user.id}`, body)
         .then((res)=>{
             alert(res.data.message)
             router.push("/Products")

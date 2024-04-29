@@ -19,14 +19,13 @@ import { useEffect } from "react";
 export default function Header() {
 
     const router = useRouter()
-    const { data: session, status } = useSession()
-    
-    
+    const session  = useSession()
 
     useEffect(()=>{
-        if(status === "unauthenticated"){
+        if(session.status === "unauthenticated"){
             router.push("/")
-        }else{
+        }
+        else{
             router.refresh()
         }
     }, [])
@@ -34,7 +33,7 @@ export default function Header() {
     return (
         <header className="w-full h-[10%] flex justify-end items-center bg-slate-300">
             <div>
-                <strong>Bem vindo, {session?.user?.name}</strong>
+                <strong>Bem vindo, {session.data?.user.name}</strong>
             </div>
             <Sheet>
                 <SheetTrigger>
@@ -65,13 +64,16 @@ export default function Header() {
                             <strong>Clientes</strong>
                         </Link>
                         {/* <Link className="my-4 text-xl" href="/Report">
-                            <strong>Relatório</strong>
+                            <strong>Relatórios</strong>
                         </Link> */}
                         <Link className="my-4 text-xl" href="/Suppliers">
                             <strong>Fornecedores</strong>
                         </Link>
                         <Link className="my-4 text-xl" href="/AuditLog">
                             <strong>Auditoria</strong>
+                        </Link>
+                        <Link className="my-4 text-xl" href="/Admin">
+                            <strong>Area Admin</strong>
                         </Link>
                     </SheetDescription>
                     <SheetDescription className=" w-full items-center flex flex-col">
