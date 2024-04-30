@@ -20,6 +20,8 @@ model Users {
   emailVerified DateTime?
   image         String?
   password      String
+  cod_reg       Int             @default(autoincrement()) @unique
+  type          String          @default("Normal")
   accounts      Account[]
   sessions      Session[]
   reports       Report[]

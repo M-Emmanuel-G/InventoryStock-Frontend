@@ -12,11 +12,12 @@ import {
   } from "@/components/ui/table"
 import useRequestData from "../_hooks/useRequestData";
 import { BASE_URL } from "../_Constants/URL";
-import CardAuditMobile from "../_components/Audit/addAudit";
+import CardAuditMobile from "../_components/Audit/CardAuditMobile";
 
 export default function AuditLog() {
 
     const [auditLog] = useRequestData(`${BASE_URL}auditLog/getall`)
+    
 
     const showAudit = auditLog.map((audit:any, key:number)=>{
 
@@ -59,7 +60,8 @@ export default function AuditLog() {
                     </TableBody>
                 </Table>
             </section>
-            <section className="w-full h-[80%] flex  sm:hidden flex-col items-center">
+            <section className="w-full h-[80%] flex  sm:hidden flex-col items-center overflow-y-auto">
+                {showAuditMobile}
             </section>
         </main>
     );

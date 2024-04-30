@@ -1,12 +1,10 @@
-import { getServerSession } from "next-auth"
-import { authOptions } from "../_lib/auth"
+import dayjs from 'dayjs'
+import 'dayjs/locale/pt-br'
+import localizedFormat from'dayjs/plugin/localizedFormat'
+dayjs.extend(localizedFormat)
 
-
-
-export abstract class GetUserID{
-    static getID = async ()=>{
-        const session = await getServerSession(authOptions)
-        
-        return (session?.user as any).id 
+export abstract class DateGenerator {
+    static dateNow = ()=>{
+        return dayjs().locale("pt-br").format("L LT")
     }
 }

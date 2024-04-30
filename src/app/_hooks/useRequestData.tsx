@@ -18,10 +18,10 @@ const useRequestData = (url:string, headers?:{})=>{
         })
         .catch((err)=>{
             setIsLoading(false)
-            setError(err)
+            setError(err.response)
         })
     },[url, page])
-    return [ data ]
+    return [ data, error ]
 }
 
 export default useRequestData

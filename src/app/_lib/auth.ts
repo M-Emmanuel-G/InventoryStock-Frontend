@@ -1,6 +1,7 @@
 import NextAuth, { AuthOptions } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import { db } from "./prisma"
+import { DateGenerator } from "../Services/getID"
 
 export const authOptions: AuthOptions = {
   // Configure one or more authentication providers
@@ -26,9 +27,19 @@ export const authOptions: AuthOptions = {
                 }
             })
              
-            if(!user) return null
-
-            return user
+            if(!user){ return null}
+            else{
+            
+              await db.auditLog.create({
+                data:{
+                  changed:`O usuário ${user.name}, acabou de logar!`,
+                  date:DateGenerator.dateNow(),
+                  user:user.name as string
+                }
+              })
+              
+              return user
+            }
           }
       })
     ],
