@@ -15,26 +15,27 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { DateGenerator } from "../Services/getID";
 
 export default function Header() {
 
     const router = useRouter()
-    const { data: session, status } = useSession()
-    
-    
+    const session  = useSession()
 
     useEffect(()=>{
-        if(status === "unauthenticated"){
+        if(session.status === "unauthenticated"){
             router.push("/")
-        }else{
+        }
+        else{
             router.refresh()
         }
     }, [])
 
     return (
-        <header className="w-full h-[10%] flex justify-end items-center bg-slate-300">
+        <header className="w-full h-[10%] flex justify-end items-center bg-sky-300">
             <div>
-                <strong>Bem vindo, {session?.user?.name}</strong>
+                <strong className="mx-2">{DateGenerator.dateNow()}</strong>
+                <strong className="mx-2">Bem vindo, {session.data?.user.name}</strong>
             </div>
             <Sheet>
                 <SheetTrigger>
@@ -46,9 +47,6 @@ export default function Header() {
                         <Image src="https://utfs.io/f/deff6651-7218-4dd3-ac04-cd1a36334d11-fcbkj8.jpg" alt="" width={200} height={200}/>
                     </SheetTitle>
                     <SheetDescription className="flex flex-col">
-                        {/* <Link className="my-4 text-xl" href="/Profile">
-                            <strong>Perfil</strong>
-                        </Link> */}
                         <Link className="my-4 text-xl" href="/Dashboard">
                             <strong>Dashboard</strong>
                         </Link>
@@ -64,9 +62,6 @@ export default function Header() {
                         <Link className="my-4 text-xl" href="/Clients">
                             <strong>Clientes</strong>
                         </Link>
-                        {/* <Link className="my-4 text-xl" href="/Report">
-                            <strong>Relatório</strong>
-                        </Link> */}
                         <Link className="my-4 text-xl" href="/Suppliers">
                             <strong>Fornecedores</strong>
                         </Link>

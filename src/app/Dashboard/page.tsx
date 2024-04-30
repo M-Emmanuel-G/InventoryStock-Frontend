@@ -4,15 +4,14 @@ import { Card } from "@/components/ui/card";
 import Header from "../_components/header";
 import useRequestData from "../_hooks/useRequestData";
 import { BASE_URL } from "../_Constants/URL"; 
-import { useSession } from "next-auth/react";
 
 export default function Dashboard () {
 
-    const [products] = useRequestData(`${BASE_URL}products/getallproducts`)
-    const [entries] = useRequestData(`${BASE_URL}entries/getallentries`)
+    const [products ] = useRequestData(`${BASE_URL}products/getallproducts`)
+    const [entries ] = useRequestData(`${BASE_URL}entries/getallentries`)
     const [ stockOuts ] = useRequestData(`${BASE_URL}outputs/getalloutputs`)
     
-    const lowStock = products.map((prod:any)=>{ return prod.qtd_stock < 100})
+    const lowStock = products.map((prod:any)=>{ return prod.qtd_stock})
     const invested = entries.map((entry:any)=>{return Number(entry.note_value) }).reduce((a:number, b:number)=> a + b,0)
     const financeOuts = stockOuts.map((out:any)=>{ return Number(out.qtd_purchase * out.products.price)}).reduce((a:number, b:number)=> a + b ,0)
 
@@ -21,29 +20,29 @@ export default function Dashboard () {
             <Header/>
             <section className="w-full h-[90%">
                 <section className="w-full flex text-center sm:flex-row flex-col sm:flex-wrap justify-center items-center ">
-                    <Card className="sm:w-52 w-72 h-20 bg-emerald-400 mx-4 mt-4 flex items-center justify-center flex-col">
+                    <Card className="sm:w-52 w-72 h-20 bg-sky-300 mx-4 mt-4 flex items-center justify-center flex-col">
                         <strong>Produtos Cadastrados</strong>
-                        <span>{products.length}</span>
+                        <span>{!products.length? "Carregando..." : products.length}</span>
                     </Card>
-                    <Card className="sm:w-52 w-72 h-20 bg-emerald-400 mx-4 mt-4 flex items-center justify-center flex-col">
+                    <Card className={`sm:w-52 w-72 h-20 bg-red-400 mx-4 mt-4 flex items-center justify-center flex-col `}>
                         <strong>Produtos Baixo Estoque</strong>
-                        <span>{lowStock.length}</span>
+                        <span>{!lowStock.length? "Carregando..." : lowStock.length}</span>
                     </Card>
-                    <Card className="sm:w-52 w-72 h-20 bg-emerald-400 mx-4 mt-4 flex items-center justify-center flex-col">
-                        <strong>Receitas</strong>
-                        <span>R$ {financeOuts.toFixed(2)}</span>
-                    </Card>
-                    <Card className="sm:w-52 w-72 h-20 bg-emerald-400 mx-4 mt-4 flex items-center justify-center flex-col">
+                    <Card className={`sm:w-52 w-72 h-20  mx-4 mt-4 flex items-center justify-center flex-col bg-sky-300 `}>
                         <strong>Investimentos</strong>
                         <span>R$ {invested.toFixed(2)}</span>
                     </Card>
-                    <Card className="sm:w-52 w-72 h-20 bg-emerald-400 mx-4 mt-4 flex items-center justify-center flex-col">
+                    <Card className={`sm:w-52 w-72 h-20 mx-4 mt-4 flex items-center justify-center flex-col bg-sky-300`}>
+                        <strong>Receitas</strong>
+                        <span>R$ {financeOuts.toFixed(2)}</span>
+                    </Card>
+                    {/* <Card className={`sm:w-52 w-72 h-20 bg-emerald-400 mx-4 mt-4 flex items-center justify-center flex-col ${(financeOuts - invested) < 0 ? "bg-red-400" : "bg-emerald-400" }`}>
                         <strong>Balanço</strong>
                         <span>R$ {(financeOuts - invested).toFixed(2)}</span>
-                    </Card>
+                    </Card> */}
                 </section>
                 <section className="w-full h-[90%] flex flex-col justify-center items-center">
-                   
+                
                 </section>
             </section>
         </main>

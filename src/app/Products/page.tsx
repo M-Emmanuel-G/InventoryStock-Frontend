@@ -34,6 +34,8 @@ export default function Products() {
                 <TableCell>{prod.product}</TableCell>
                 <TableCell>{prod.qtd_stock} unit.</TableCell>
                 <TableCell>R$ {Number(prod.price).toFixed(2)}</TableCell>
+                <TableCell>R$ {Number(prod.price * prod.sales_percentage).toFixed(2)}</TableCell>
+
                 <TableCell className="text-right">
                     <EditProduct
                         id={prod.id}
@@ -48,7 +50,6 @@ export default function Products() {
     })
 
     const showProductsMobile = Products.filter((prod:any)=>{ return prod.product.includes(search)}).map((prod:any, key:number)=>{
-        console.log(prod.product)
         return(
             <CardProdMobile
                 key={key}
@@ -81,7 +82,8 @@ export default function Products() {
                             <TableHead>Data</TableHead>
                             <TableHead>Produto</TableHead>
                             <TableHead>Estoque</TableHead>
-                            <TableHead>Valor</TableHead>
+                            <TableHead>Valor de compra</TableHead>
+                            <TableHead>Valor de venda</TableHead>
                             <TableHead className="text-right">Açôes</TableHead>
                             </TableRow>
                         </TableHeader>

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 const useRequestData = (url:string, headers?:{})=>{
     const [ data, setData ] = useState([])
     const [ error, setError ] = useState([])
-    const [ isLoading, setIsLoading ] = useState(false)
+    const [ isLoading, setIsLoading ] = useState<boolean>(true)
     const [ page, setPage ]= useState(false) 
 
     useEffect(()=>{
@@ -18,10 +18,10 @@ const useRequestData = (url:string, headers?:{})=>{
         })
         .catch((err)=>{
             setIsLoading(false)
-            setError(err)
+            setError(err.response)
         })
     },[url, page])
-    return [ data ]
+    return [ data, error ]
 }
 
 export default useRequestData

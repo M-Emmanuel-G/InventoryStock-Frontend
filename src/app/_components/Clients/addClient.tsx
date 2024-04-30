@@ -13,9 +13,12 @@ import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { useState } from "react";
 import { BASE_URL } from "../../_Constants/URL";
+import { useSession } from "next-auth/react";
   
 
 export default function AddClient() {
+
+    const session = useSession()
 
     const [fullName, setFullName ] = useState<string>("")
     const [address, setAddress ] = useState<string>("")
@@ -33,11 +36,12 @@ export default function AddClient() {
         }
 
         axios
-            .post(`${BASE_URL}clients/create`, body)
+            .post(`${BASE_URL}clients/create/userID/${session.data?.user.id}`, body)
             .then((res)=>{
                 alert(res.data.message)
             })
             .catch((err)=>{alert(err.response.data)})
+            .catch((err)=>{console.log(err.response)})
     }
 
     return (
