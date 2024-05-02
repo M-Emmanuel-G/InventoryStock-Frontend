@@ -10,9 +10,9 @@ export default function Report() {
 
    const [GetProducts] = useRequestData(`${BASE_URL}products/getallproducts`)
     
-    const showProducts = GetProducts.map((prod:Products)=>{
+    const showProducts = GetProducts.map((prod:Products, key:number)=>{
         return (
-            <div className="w-full flex justify-between">
+            <div key={prod.id} className="w-full flex justify-between">
                 <div className="flex mx-4 mt-2">
                     <strong>Produto: </strong>
                     <span> {prod.product}</span>
