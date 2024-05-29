@@ -13,6 +13,7 @@ import axios from "axios";
 import { useState } from "react";
 import { BASE_URL } from "../../_Constants/URL";
 import { useSession } from "next-auth/react";
+import AddProductsDatabase from "@/app/Products/Actions/AddProducts";
 
 export interface PageProps{
     page?: boolean
@@ -35,14 +36,10 @@ export default function AddProducts({page}:PageProps) {
             productPrice:price
         }
 
-        axios
-            .post(`${BASE_URL}products/addproducts/userID/${session.data?.user.id}`, body)
-            .then((res)=>{
-                alert(res.data)
-            })
-            .catch((err)=>{
-                alert(err.response.data)
-            })
+        await AddProductsDatabase({
+            price,
+            product
+        })
             
         setProduct("")
         setPrice(0)
