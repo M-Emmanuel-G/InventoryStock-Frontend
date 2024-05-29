@@ -1,11 +1,6 @@
-"use client"
-
-import { useState } from "react";
-import { BASE_URL } from "../_Constants/URL";
 import AddEntries from "../_components/Entries/addEntries";
 import CardEntryMobile from "../_components/Entries/cardEntryMobile";
 import Header from "../_components/header";
-import useRequestData from "../_hooks/useRequestData";
 import {
     Table,
     TableBody,
@@ -16,13 +11,18 @@ import {
     TableRow,
   } from "@/components/ui/table"
 import { Input } from "@/components/ui/input";
+import { db } from "../_lib/prisma";
 
-export default function Entries() {
+export default async function Entries() {
     
-    const [data] = useRequestData(`${BASE_URL}Entries/getallentries`)
+    const getEntries  = await db.productEntries.findMany({
+        include:{
+            product:true,
+            supplier:true
+        }
+    })
     
-    const [ search, setSearch ] = useState("")
-    const showEntries = data.map((entry:any, key:number)=>{
+    const showEntries = getEntries.map((entry:any, key:number)=>{
         
         return(
             <TableRow key={key}>
@@ -37,7 +37,7 @@ export default function Entries() {
         )
     })
 
-    const showEntriesMobile = data.filter((entry:any)=>{ return entry.date.includes(search)}).map((entry:any, key:number)=>{
+    const showEntriesMobile = getEntries.filter((entry:any)=>{ return entry.date.includes("")}).map((entry:any, key:number)=>{
         return(
             <CardEntryMobile
                 key={key}
@@ -50,13 +50,13 @@ export default function Entries() {
         <main className="w-screen h-screen flex flex-col">
             <Header/>
             <section className="w-full h-[10%] flex justify-end items-center">
-                <Input
+                {/* <Input
                     type="number"
                     className="w-40 h-8 ml-12"
                     placeholder="Buscar..."
                     value={search}
                     onChange={(ev)=>{setSearch(ev.target.value)}}
-                />
+                /> */}
                 <AddEntries/>
             </section>
             <section className="w-full h-[80%] hidden sm:flex flex-col">

@@ -1,5 +1,3 @@
-"use client"
-
 import AddProducts from "../_components/Products/addProducts";
 import DialogDelete from "../_components/Products/dialogDelete";
 import EditProduct from "../_components/Products/drawerEdit";
@@ -18,14 +16,15 @@ import {
 import CardProdMobile from "../_components/Products/CardProductMobile";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { db } from "../_lib/prisma";
   
 
-export default function Products() {
+export default async function Products() {
 
-    const [ Products ] = useRequestData(`${BASE_URL}Products/getallproducts`)
-    const [ search, setSearch ] = useState<string>("")
+    const getProducts = await db.products.findMany()
     
-    const showProducts = Products.filter((prod:any)=>{ return prod.product.includes(search)}).map((prod:any, key:number)=>{
+    
+    const showProducts = getProducts.filter((prod:any)=>{ return prod.product.includes("")}).map((prod:any, key:number)=>{
         
         return(
             <TableRow key={key}>
@@ -49,7 +48,7 @@ export default function Products() {
         )
     })
 
-    const showProductsMobile = Products.filter((prod:any)=>{ return prod.product.includes(search)}).map((prod:any, key:number)=>{
+    const showProductsMobile = getProducts.filter((prod:any)=>{ return prod.product.includes("")}).map((prod:any, key:number)=>{
         return(
             <CardProdMobile
                 key={key}
@@ -64,12 +63,12 @@ export default function Products() {
             <Header/>
             <section className="w-full h-[90%] flex-col">
                 <section className="w-full h-[10%] flex items-center justify-end">
-                    <Input
+                    {/* <Input
                         className="w-64 h-8 ml-12"
                         placeholder="Buscar..."
                         value={search}
                         onChange={(ev)=>{setSearch(ev.target.value)}}
-                    />
+                    /> */}
                     <AddProducts/>
                 </section>
                 <section className="hidden sm:flex">

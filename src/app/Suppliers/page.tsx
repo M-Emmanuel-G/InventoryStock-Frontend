@@ -1,5 +1,3 @@
-"use client"
-
 import {
     Table,
     TableBody,
@@ -10,22 +8,18 @@ import {
     TableRow,
   } from "@/components/ui/table"
 import Header from "../_components/header";
-import { BASE_URL } from "../_Constants/URL";
-import useRequestData from "../_hooks/useRequestData";
 import RemoveSupplier from "../_components/suppliers/deleteSupplier";
 import AddSupplier from "../_components/suppliers/addSupplier";
 import UpdateSupplier from "../_components/suppliers/updateSupplier";
 import CardSupplierMobile from "../_components/suppliers/cardSupplierMobile";
-import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import { db } from "../_lib/prisma";
 
-export default function Suppliers() {
-
-    const [data] = useRequestData(`${BASE_URL}Suppliers/getallsuppliers`)
-    const [ search, setSearch ] = useState<string>("")
+export default async function Suppliers() {
   
+    const getSuppliers = await db.suppliers.findMany()
     
-    const showSuppliers = data.filter((supp:any)=>{return supp.supplier.includes(search)}).map((supp:any, key:number)=>{
+    const showSuppliers = getSuppliers.filter((supp:any)=>{return supp.supplier.includes("")}).map((supp:any, key:number)=>{
         
         return(
             <TableRow key={key}>
@@ -50,7 +44,7 @@ export default function Suppliers() {
         )
     })
 
-    const showSuppliersMobile = data.filter((supp:any)=>{return supp.supplier.includes(search)}).map((supp:any, key:number)=>{
+    const showSuppliersMobile = getSuppliers.filter((supp:any)=>{return supp.supplier.includes("")}).map((supp:any, key:number)=>{
         
         return(
             <CardSupplierMobile
@@ -67,12 +61,12 @@ export default function Suppliers() {
         <main className="w-screen h-screen flex flex-col">
             <Header/>
             <section className="w-full h-[10%] flex justify-end items-center">
-                <Input
+                {/* <Input
                     className="w-40 h-8 ml-12"
                     placeholder="Buscar..."
                     value={search}
                     onChange={(ev)=>{setSearch(ev.target.value)}}
-                />
+                /> */}
                 <AddSupplier/>
             </section>
             <section className="w-full h-[80%] hidden sm:flex">

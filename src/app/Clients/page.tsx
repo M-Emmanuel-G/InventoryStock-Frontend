@@ -1,11 +1,7 @@
-"use client"
-
-import { BASE_URL } from "../_Constants/URL";
 import AddClient from "../_components/Clients/addClient";
 import Header from "../_components/header";
 import RemoveClientComp from "../_components/Clients/removeClient";
 import UpdateClient from "../_components/Clients/updateAuthrization";
-import useRequestData from "../_hooks/useRequestData";
 import {
     Table,
     TableBody,
@@ -16,16 +12,13 @@ import {
     TableRow,
   } from "@/components/ui/table"
 import CardClientMobile from "../_components/Clients/CardClientMobile";
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
+import { db } from "../_lib/prisma";
 
-export default function Clients() {
+export default async function Clients() {
+    
+    const getClients = await db.clients.findMany()
 
-    const [data] = useRequestData(`${BASE_URL}Clients/getallClients`)
-    const [ search, setSearch ] = useState<string>("")
-    
-    
-    const showClients = data.filter((client:any)=>{return client.name.includes(search)}).map((client:any, key:number)=>{
+    const showClients = getClients.filter((client:any)=>{return client.name.includes("")}).map((client:any, key:number)=>{
         
         return(
             <TableRow key={key}>
@@ -47,7 +40,7 @@ export default function Clients() {
         )
     })
 
-    const showClientsMobile = data.filter((client:any)=>{return client.name.includes(search)}).map((client:any, key:number)=>{
+    const showClientsMobile = getClients.filter((client:any)=>{return client.name.includes("")}).map((client:any, key:number)=>{
         
         return(
            <CardClientMobile
@@ -63,12 +56,12 @@ export default function Clients() {
         <main className="w-screen h-screen flex flex-col"> 
             <Header/>
             <section className="w-full h-[10%] flex items-center justify-end">
-                <Input
+                {/* <Input
                     className="w-40 h-8 ml-12"
                     placeholder="Buscar..."
                     value={search}
                      onChange={(ev)=>{setSearch(ev.target.value)}}
-                />
+                /> */}
                 <AddClient/>
             </section>
             <section className="w-full h-[80%] sm:flex hidden">
