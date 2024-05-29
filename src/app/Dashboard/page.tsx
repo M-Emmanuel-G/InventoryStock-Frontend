@@ -1,19 +1,18 @@
-"use client"
-
 import { Card } from "@/components/ui/card";
 import Header from "../_components/header";
 import useRequestData from "../_hooks/useRequestData";
 import { BASE_URL } from "../_Constants/URL"; 
+import { db } from "../_lib/prisma";
 
-export default function Dashboard () {
+export default async function Dashboard () {
 
-    const [products ] = useRequestData(`${BASE_URL}products/getallproducts`)
-    const [entries ] = useRequestData(`${BASE_URL}entries/getallentries`)
-    const [ stockOuts ] = useRequestData(`${BASE_URL}outputs/getalloutputs`)
+    const getProducts = await db.products.findMany()
+    const getEntries = await db.productEntries.findMany()
+    const getStockOuts = await db.outputProducts.findMany()
     
-    const lowStock = products.map((prod:any)=>{ return prod.qtd_stock})
-    const invested = entries.map((entry:any)=>{return Number(entry.note_value) }).reduce((a:number, b:number)=> a + b,0)
-    const financeOuts = stockOuts.map((out:any)=>{ return Number(out.qtd_purchase * out.products.price)}).reduce((a:number, b:number)=> a + b ,0)
+    const lowStock = getProducts.map((prod:any)=>{ return prod.qtd_stock})
+    const invested = getEntries.map((entry:any)=>{return Number(entry.note_value) }).reduce((a:number, b:number)=> a + b,0)
+    const financeOuts = getStockOuts.map((out:any)=>{ return Number(out.qtd_purchase * out.products.price)}).reduce((a:number, b:number)=> a + b ,0)
 
     return (
         <main className="w-screen h-screen flex flex-col">
@@ -22,7 +21,7 @@ export default function Dashboard () {
                 <section className="w-full flex text-center sm:flex-row flex-col sm:flex-wrap justify-center items-center ">
                     <Card className="sm:w-52 w-72 h-20 bg-sky-300 mx-4 mt-4 flex items-center justify-center flex-col">
                         <strong>Produtos Cadastrados</strong>
-                        <span>{!products.length? "Carregando..." : products.length}</span>
+                        <span>{!getProducts.length? "Carregando..." : getProducts.length}</span>
                     </Card>
                     <Card className={`sm:w-52 w-72 h-20 bg-red-400 mx-4 mt-4 flex items-center justify-center flex-col `}>
                         <strong>Produtos Baixo Estoque</strong>

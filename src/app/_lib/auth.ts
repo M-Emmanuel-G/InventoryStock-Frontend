@@ -16,6 +16,7 @@ export const authOptions: AuthOptions = {
         name:"Credentials",
         credentials:{
             email:{label:"Insira seu email", type:"text"},
+            password:{label:"Insira seu email", type:"password"},
             // password:{label:"Insira sua senha", type:"password"},
             
         },
@@ -24,6 +25,7 @@ export const authOptions: AuthOptions = {
             const user = await db.users.findUnique({
                 where:{
                     email: credentials?.email,
+                    // password: credentials?.password
                 }
             })
              

@@ -32,8 +32,8 @@ export default function Header() {
     }, [])
 
     return (
-        <header className="w-full h-[10%] flex justify-end items-center bg-sky-300">
-            <div>
+        <header className="w-full h-[10%] flex justify-between items-center bg-sky-300">
+            <div className="flex flex-col px-8">
                 <strong className="mx-2">{DateGenerator.dateNow()}</strong>
                 <strong className="mx-2">Bem vindo, {session.data?.user.name}</strong>
             </div>

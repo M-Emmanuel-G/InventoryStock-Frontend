@@ -8,19 +8,18 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table"
-import useRequestData from "../_hooks/useRequestData";
-import { BASE_URL } from "../_Constants/URL";
 import CardAuditMobile from "../_components/Audit/CardAuditMobile";
 import { db } from "../_lib/prisma";
 
 export default async function AuditLog() {
 
-    const getAudits = await db.auditLog.findMany()
-    
+    const getAudits = await db.auditLog.findMany({
+        orderBy:{
+            cod_audit:"desc"
+        }
+    })
 
     const showAudit = getAudits.map((audit:any, key:number)=>{
-
-    
         return(
             <TableRow key={key}>
                 <TableCell className="font-medium">{audit.cod_audit}</TableCell>
