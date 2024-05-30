@@ -3,50 +3,54 @@ import EditProduct from "./drawerEdit";
 import DialogDelete from "./dialogDelete";
 
 interface CardMobile {
-    prod:{
-        product:String,
+    
+        product:string,
         cod_product:number,
         entry_time:string,
         qtd_stock:number,
-        price:number,
-    },
-    productID:string,
+        productID:string,
+        price:number
+        percentage:number
 }
 
-export default function CardProdMobile({prod, productID}:CardMobile ) {
+export default function CardProdMobile(params:CardMobile ) {
     
     return (
         <div>
             <Card className="w-[370px] h-[150px] bg-slate-300 my-2">
                 <CardTitle className="text-center text-xl mt-2 flex justify-between">
                     
-                    <span className="px-4">{prod.product}</span>
+                    <span className="px-4">{params.product}</span>
 
                     <div className="px-4">
                         <EditProduct
-                            id={productID}
+                            id={params.productID}
+                            product={params.product}
+                            percentage={Number(params.percentage)}
+                            qtd={params.qtd_stock}
+                            price={Number(params.price)}
                         />
                         <DialogDelete
-                            id={productID}
+                            id={params.productID}
                         />
                     </div>
                 </CardTitle>
                 <CardDescription className="text-black flex flex-col justify-center">
                     <div className="mt-1.5 px-4 flex justify-between">
                         <strong>Codigo: </strong>
-                        <span>{prod.cod_product}</span>
+                        <span>{params.cod_product}</span>
                     </div>
                     <div className="mt-1.5 px-4 flex justify-between">
                         <strong>Data: </strong>
-                        <span>{prod.entry_time}</span>
+                        <span>{params.entry_time}</span>
                     </div>
                     <div className="mt-1.5 px-4 flex justify-between">
                         <strong>Estoque: </strong>
-                        <span>{prod.qtd_stock} unit.</span>
+                        <span>{params.qtd_stock} unit.</span>
                     </div>
                     <div className="mt-1.5 px-4 flex justify-between">
                         <strong>Valor: </strong>
-                        <span>R$ {Number(prod.price).toFixed(2)}</span>
+                        <span>R$ {Number(params.price).toFixed(2)}</span>
                     </div>
                 </CardDescription>
             </Card>
