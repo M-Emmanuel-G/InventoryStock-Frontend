@@ -1,6 +1,7 @@
 "use server"
 
 import { db } from "@/app/_lib/prisma"
+import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
 interface ProductProps{
@@ -13,5 +14,5 @@ export default async function RemoveProductDatabase(params:ProductProps) {
             id: params.id
         }
     })
-    redirect("/Dashboard")
+    revalidatePath("/Products")
 }
