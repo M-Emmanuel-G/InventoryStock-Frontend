@@ -46,6 +46,8 @@ const [percentage, setPercentage] = useState<number>(params.percentage)
                 price,
                 id: params.id
             })
+
+            alert("Produto alterado com sucesso!")
         } catch (error:any) {
             alert(error.message)
         }
