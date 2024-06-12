@@ -71,7 +71,7 @@ model VerificationToken {
 
 model Products{
   id String @id @default(uuid())
-  cod_product Int @default(autoincrement())
+  cod_product Int @default(autoincrement()) @unique
   product String
   qtd_stock Int @default(0)
   price Decimal @db.Decimal(10,2)

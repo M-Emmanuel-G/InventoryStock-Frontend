@@ -10,10 +10,13 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table"
-import { Input } from "@/components/ui/input";
 import { db } from "../_lib/prisma";
 
 export default async function Entries() {
+
+    const products = await db.products.findMany()
+
+    const suppliers = await db.suppliers.findMany()
     
     const getEntries  = await db.productEntries.findMany({
         include:{
@@ -45,6 +48,7 @@ export default async function Entries() {
             />
         )
     })
+    
 
     return (
         <main className="w-screen h-screen flex flex-col">
@@ -57,7 +61,9 @@ export default async function Entries() {
                     value={search}
                     onChange={(ev)=>{setSearch(ev.target.value)}}
                 /> */}
-                <AddEntries/>
+                <AddEntries
+                    
+                />
             </section>
             <section className="w-full h-[80%] hidden sm:flex flex-col">
                 <Table>

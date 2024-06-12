@@ -1,7 +1,5 @@
 import { Card } from "@/components/ui/card";
 import Header from "../_components/header";
-import useRequestData from "../_hooks/useRequestData";
-import { BASE_URL } from "../_Constants/URL"; 
 import { db } from "../_lib/prisma";
 
 export default async function Dashboard () {

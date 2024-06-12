@@ -2,6 +2,7 @@
 
 import { DateGenerator } from "@/app/Services/getID"
 import { db } from "@/app/_lib/prisma"
+import { revalidatePath } from "next/cache"
 
 interface ProductsProps{
     product: string
@@ -16,4 +17,6 @@ export default async function AddProductsDatabase(params:ProductsProps) {
             entry_time: DateGenerator.dateNow()
         }
     })
+
+    revalidatePath("Products")
 }

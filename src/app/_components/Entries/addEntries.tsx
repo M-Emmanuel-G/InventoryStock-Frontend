@@ -1,7 +1,6 @@
 "use client"
 
-import { BASE_URL } from "@/app/_Constants/URL";
-import useRequestData from "@/app/_hooks/useRequestData";
+import { AddEntryDatabase } from "@/app/Entries/Actions/addEntry";
 import { Button } from "@/components/ui/button";
   import {
     Dialog,
@@ -14,10 +13,8 @@ import { Button } from "@/components/ui/button";
   
      
 import { Input } from "@/components/ui/input";
-import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-  
 
 export default function AddEntries() {
 
@@ -26,39 +23,34 @@ export default function AddEntries() {
     const [qtd,setQtd] = useState<number>(0)
     const [price,setPrice] = useState<number>(0)
     const sumNoteValue = qtd * price
-    const [productID, setProductID] = useState<string>("")
-    const [supplierID, setSupplierID] = useState<string>("")
+    const [CNPJ, setCNPJ] = useState("")
+    const [codProduct, setCodProduct] = useState("")
 
-    const [products] = useRequestData(`${BASE_URL}products/getallproducts`)
-    const [supplier] = useRequestData(`${BASE_URL}suppliers/getallsuppliers`)
+    const addEntry = async () => {
+        try {
 
-   const showSuppliers = supplier.map((supp:any, key:number)=>{
-        return (
-            <option key={key} onClick={()=>{setSupplierID(supp.id)}}>{supp.supplier}</option>
-        )
-   })
+            if(!qtd) throw new Error("Quantidade nao informada!");
+            if(!price) throw new Error("Valor nao informada!");
+            if(!CNPJ) throw new Error("CNPJ nao informada!");
+            if(!codProduct) throw new Error("Codigo do produto nao informada!");
+            if(isNaN(qtd)) throw new Error("Formato de quantidade invalida");
+            if(isNaN(price)) throw new Error("Formato do valor invalida");
+            
+            
 
-   const showProducts = products.map((prod:any, key:number)=>{
-        return (
-                <option key={key} onClick={()=>{setProductID(prod.id)}}>{prod.product}</option>
-        )
-   })
+            const body = {
+                qtd,
+                price,
+                cnpj: CNPJ,
+                codProduct
+            }
+            
+            AddEntryDatabase(body)
 
-    const addEntry = async ()=>{
-
-        const body = {
-            qtd,
-            price
+        } catch (error:any) {
+            alert(error.message)
         }
 
-        axios
-            .post(`${BASE_URL}Entries/makeEntry/productID/${productID}/supplierID/${supplierID}/userID/${session.data?.user.id}`, body)
-            .then((res)=>{
-                alert(res.data.message)
-                console.log(res.data);
-                
-            })
-            .catch((err)=>{alert(err.response.data)})
     }
 
     return (
@@ -89,20 +81,22 @@ export default function AddEntries() {
                         />
                     </div>
                     <div className="flex my-4 flex-col">
-                        <strong className="text-sm mx-4">Fornecedor</strong>
-                        <select
-                            className="w-60 h-8 my-4 text-center text-black"
-                        >
-                            {showSuppliers}
-                        </select>
+                        <strong className="text-sm mx-4">CNPJ do Fornecedor</strong>
+                        <Input
+                            type="text"
+                            className=" w-20 h-8 text-center"
+                            value={CNPJ}
+                            onChange={(ev)=>{setCNPJ(ev.target.value)}}
+                        />
                     </div>
                     <div className="flex my-4 flex-col">
-                    <strong className="text-sm mx-4">Produto</strong>
-                        <select
-                            className="w-60 h-8 my-4 text-center text-black"
-                        >
-                            {showProducts}
-                        </select>
+                    <strong className="text-sm mx-4">Codigo do Produto</strong>
+                            <Input
+                                type="text"
+                                className=" w-20 h-8 text-center"
+                                value={codProduct}
+                                onChange={(ev)=>{setCodProduct(ev.target.value)}}
+                            />
                     </div>
                     
                     <div className="flex my-4">

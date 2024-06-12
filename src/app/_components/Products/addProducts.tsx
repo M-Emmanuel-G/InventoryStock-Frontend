@@ -31,20 +31,21 @@ export default function AddProducts({page}:PageProps) {
     const sendAddProduct = async (ev:any)=>{
         ev.preventDefault()
 
-        const body = {
-            product,
-            productPrice:price
+        try {
+            
+            if (!product) throw new Error("Nome do produto não inserido!")
+            if (!price) throw new Error("Valor do produto não inserido!")
+            if(isNaN(price)) throw new Error("No valor do produto, será aceito somente numeros!");
+            if(product.length < 2) throw new Error("Nome do produto precisa contér no minimo dois caracteres!");
+            
+            
+            
+            await AddProductsDatabase({price, product})
+            alert("produto cadastrado com sucesso!")
+        } catch (error:any) {
+            alert(error.message)
         }
-
-        await AddProductsDatabase({
-            price,
-            product
-        })
-            
-        setProduct("")
-        setPrice(0)
-            
-}
+    }
 
 
  return (
