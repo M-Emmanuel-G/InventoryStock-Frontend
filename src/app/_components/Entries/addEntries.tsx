@@ -87,7 +87,7 @@ export default function AddEntries() {
                         <strong className="text-sm mx-4">CNPJ do Fornecedor</strong>
                         <Input
                             type="text"
-                            className=" w-20 h-8 text-center"
+                            className=" w-36 h-8 text-center"
                             value={CNPJ}
                             onChange={(ev)=>{setCNPJ(ev.target.value)}}
                         />
@@ -96,7 +96,7 @@ export default function AddEntries() {
                     <strong className="text-sm mx-4">Codigo do Produto</strong>
                             <Input
                                 type="text"
-                                className=" w-20 h-8 text-center"
+                                className=" w-36 h-8 text-center"
                                 value={codProduct}
                                 onChange={(ev)=>{setCodProduct(ev.target.value)}}
                             />

@@ -30,22 +30,33 @@ export const AddEntryDatabase = async (params:EntryProps)=>{
         if(!getProduct) return "Produto nao encontrado!"
         if(!getSupplier) return "Fornecedor nao encontrado!"
 
-        // await db.productEntries.create({
-        //     data:{
-        //         date:DateGenerator.dateNow(),
-        //         price:params.price,
-        //         qtd:params.qtd,
-        //         note_value: params.price * params.qtd,
-        //         product_id:getProduct?.id as string,
-        //         supplier_id: getSupplier?.id as string
+        await db.productEntries.create({
+            data:{
+                date:DateGenerator.dateNow(),
+                price:params.price,
+                qtd:params.qtd,
+                note_value: params.price * params.qtd,
+                product_id:getProduct?.id as string,
+                supplier_id: getSupplier?.id as string
     
-        //     }
-        // })
+            }
+        })
+
+        await db.products.update({
+            where:{
+                cod_product:Number(params.codProduct)
+            },
+            data:{
+                qtd_stock: getProduct.qtd_stock + params.qtd
+            }
+        })
         
+        revalidatePath("Entries")
+
+        return "Nota do produto foi cadastrada com sucesso!"
 
     } catch (error:any) {
         throw new Error(error.message);
     }
 
-    revalidatePath("Entries")
 }
