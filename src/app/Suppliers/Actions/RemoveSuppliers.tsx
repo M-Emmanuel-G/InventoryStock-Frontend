@@ -24,7 +24,8 @@ export default async function RemoveSupplierDatabase(params:SupplierProps) {
         })
 
         revalidatePath("/Suppliers")
-        
+        return "Fornecedor excluido com sucesso!"
+
     } catch (error:any) {
         throw new Error(error.message);
     }

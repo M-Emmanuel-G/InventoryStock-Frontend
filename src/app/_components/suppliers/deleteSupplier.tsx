@@ -1,9 +1,6 @@
 "use client"
 
 import { Trash2 } from "lucide-react";
-import axios from "axios";
-import { BASE_URL } from "../../_Constants/URL";
-
 import {
     AlertDialog,
     AlertDialogAction,
@@ -16,6 +13,7 @@ import {
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
 import { useSession } from "next-auth/react";
+import RemoveSupplierDatabase from "@/app/Suppliers/Actions/RemoveSuppliers";
   
 
 interface RemoveProps{
@@ -29,11 +27,13 @@ export default function RemoveSupplier({id, supplier}:RemoveProps) {
 
     const remove = async ()=>{
 
-        axios
-            .delete(`${BASE_URL}Suppliers/delete/supplierID/${id}/userID/${session.data?.user.id}`)
-            .then(res=> alert(res.data.message))
-            .catch(err=>alert(err.response.data))
-
+        try {
+            const result = await RemoveSupplierDatabase({ supplierID:id })
+            alert(result)
+        } catch (error:any) {
+            alert(error.message)
+        }
+        
     }
 
     return (
