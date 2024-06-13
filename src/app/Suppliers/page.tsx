@@ -12,7 +12,6 @@ import RemoveSupplier from "../_components/suppliers/deleteSupplier";
 import AddSupplier from "../_components/suppliers/addSupplier";
 import UpdateSupplier from "../_components/suppliers/updateSupplier";
 import CardSupplierMobile from "../_components/suppliers/cardSupplierMobile";
-import { Input } from "@/components/ui/input";
 import { db } from "../_lib/prisma";
 
 export default async function Suppliers() {

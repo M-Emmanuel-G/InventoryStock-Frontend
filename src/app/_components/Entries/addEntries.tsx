@@ -45,7 +45,10 @@ export default function AddEntries() {
                 codProduct
             }
             
-            AddEntryDatabase(body)
+            const result = await AddEntryDatabase(body)
+
+           alert(result);
+           
 
         } catch (error:any) {
             alert(error.message)
