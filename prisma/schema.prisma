@@ -144,8 +144,9 @@ model Clients{
   cod_client Int @unique @default(autoincrement())
   name String
   address String
-  available Boolean @default(false)
-  email String
+  cpf String @unique
+  isBlocked Boolean @default(true)
+  email String @unique
   contact String
   report Report[]
   OutputProducts OutputProducts[]
