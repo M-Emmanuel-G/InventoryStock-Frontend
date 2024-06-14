@@ -16,12 +16,13 @@ import { Pencil } from "lucide-react";
 import axios from "axios";
 import { BASE_URL } from "../../_Constants/URL";
 import { useSession } from "next-auth/react";
+import UpdateClientDatabase from "@/app/Clients/Actions/updateClient";
 
 interface UpdateProps{
   id:string,
   client:{
     address:string,
-    available:string,
+    isBloqued:boolean,
     id:string,
     contact:string,
     email:string,
@@ -31,7 +32,7 @@ interface UpdateProps{
 
 export default function UpdateClient({id, client}:UpdateProps) {
     
-    const [available, setAvailable ] = useState<string>("not-authorized")
+    const [isBloqued, setIsBloqued ] = useState<boolean>(true)
     const [fullName, setFullName ] = useState<string>("")
     const [address, setAddress ] = useState<string>("")
     const [email, setEmail ] = useState<string>("")
@@ -39,40 +40,29 @@ export default function UpdateClient({id, client}:UpdateProps) {
 
     const session = useSession()
 
-    const verifyAuthorization = ()=>{
-      if(available === "authorized") return true
-      else if(available === "not-authorized") return false
-      else return false
-    } 
-
     useEffect(()=>{
       setFullName(client.name)
       setAddress(client.address)
       setEmail(client.email)
       setContact(client.contact)
-        if(String(client.available) === "false" ) setAvailable(String("not-authorized"))
-        else if(String(client.available) === "true" ) setAvailable(String("authorized"))
     },[])
 
     const update = async (ev:any)=>{
       ev.preventDefault()
 
       const body = {
+        id,
         address,
-        available : verifyAuthorization(),
+        available : isBloqued,
         clientID: client.id,
         contact,
         email,
         name : fullName
       }
 
-      axios
-        .patch(`${BASE_URL}clients/update/clientID/${id}/userID/${session.data?.user.id}`, body )
-        .then((res)=>{
-          alert(res.data.message)
-        })
-        .catch((err)=>{alert(err.response.data)})
-       
+      const response = await UpdateClientDatabase(body)
+      alert(response)
+      
     }
 
     return (
@@ -112,14 +102,14 @@ export default function UpdateClient({id, client}:UpdateProps) {
                           className=" text-center text-black text-sm my-4"
                       />
                     <div className="w-full flex justify-evenly">
-                      <div>
+                      {/* <div>
                         <input type="radio" id="authorized" name="authorization" value="authorized" onChange={(ev)=>{setAvailable(ev.target.value)}} checked={available === "authorized"} />
                         <label className="mx-4" htmlFor="authorized">Autorizado</label>
                       </div>
                       <div>
                         <input type="radio" id="not-authorized" name="authorization" value="not-authorized" onChange={(ev)=>{setAvailable(ev.target.value)}} checked={available === "not-authorized"} />
                         <label className="mx-4" htmlFor="not-authorized">Não Autorizado</label>
-                      </div>
+                      </div> */}
                     </div>
                     </div>
                   <div className="w-full flex justify-center">
