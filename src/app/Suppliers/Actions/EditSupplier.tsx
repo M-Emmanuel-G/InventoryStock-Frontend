@@ -32,7 +32,7 @@ export default async function EditSupplierDatabase(params:SupplierProps) {
                 Address:params.address,
                 supplier:params.supplierName,
                 contact:params.contact
-
+                
             }
         })
 

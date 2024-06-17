@@ -22,8 +22,8 @@ export default function Header() {
     }, [])
 
     return (
-        <header className="w-full h-[10%] flex justify-start items-center bg-sky-300">
-           <div className="w-2/6 h-full flex items-center">
+        <header className="w-full h-[10%] flex justify-start items-center bg-gray-200">
+           <div className="w-5/6 h-full flex items-center">
                 <Link href="/Dashboard">
                     <ChevronLeftCircle className="w-12 h-12 mx-4"/>
                 </Link>
@@ -32,7 +32,7 @@ export default function Header() {
                     <strong className="mx-2">Bem vindo, {session.data?.user.name}</strong>
                 </div>
            </div>
-           <div className="w-4/6 h-full flex justify-end items-center">
+           <div className="w-1/6 h-full flex justify-end items-center">
             <LogOutIcon 
                 className="w-12 h-12 mx-4"
                 onClick={()=>{signOut(), router.push("/")}}    

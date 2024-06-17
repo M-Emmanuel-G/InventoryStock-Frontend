@@ -16,7 +16,11 @@ import { db } from "../_lib/prisma";
 
 export default async function Clients() {
     
-    const getClients = await db.clients.findMany()
+    const getClients = await db.clients.findMany({
+        orderBy:{
+             cod_client:"asc"
+        }
+    })
 
     const showClients = getClients.filter((client:any)=>{return client.name.includes("")}).map((client:any, key:number)=>{
         

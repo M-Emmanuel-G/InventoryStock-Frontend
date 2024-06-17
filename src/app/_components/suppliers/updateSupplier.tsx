@@ -86,23 +86,13 @@ export default function UpdateSupplier({id, supplier}:UpdateProps) {
                           className=" text-center text-black text-sm my-4"
                       />
                       <Input
-                          value={email}
-                          onChange={(ev)=>{setEmail(ev.target.value)}}
-                          placeholder="Email"
-                          className=" text-center text-black text-sm my-4"
-                      />
-                      <Input
                           value={contact}
                           onChange={(ev)=>{setContact(ev.target.value)}}
                           placeholder="Contato"
                           className=" text-center text-black text-sm my-4"
-                      />
-                      <Input
-                          value={cnpj}
-                          onChange={(ev)=>{setCnpj(ev.target.value)}}
-                          placeholder="Contato"
-                          className=" text-center text-black text-sm my-4"
-                      />
+                          />
+                      <span className=" text-sm my-2">Email: {supplier.email}</span>
+                      <span className=" text-sm my-2">CNPJ: {supplier.cnpj}</span>
                   </div>
                   <div className="w-full flex justify-center">
                       <Button className="w-64">Confirmar</Button>
