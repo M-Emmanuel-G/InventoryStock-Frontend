@@ -16,6 +16,7 @@ import { Pencil } from "lucide-react";
 import axios from "axios";
 import { BASE_URL } from "../../_Constants/URL";
 import { useSession } from "next-auth/react";
+import EditSupplierDatabase from "@/app/Suppliers/Actions/EditSupplier";
 
 interface UpdateProps{
   id:string
@@ -50,20 +51,14 @@ export default function UpdateSupplier({id, supplier}:UpdateProps) {
       ev.preventDefault()
 
       const body = {
-        supplier:supplierName,
-        cnpj,
-        Address:address,
-        email,
-        contact,
+        supplierID:id,
+        supplierName,
+        contact:supplier.contact,
+        address:supplier.Address,
       }
 
-      axios
-        .patch(`${BASE_URL}suppliers/update/supplierID/${id}/userID/${session.data?.user.id}`, body )
-        .then((res)=>{
-            alert(res.data.message)
-        })
-        .catch((err)=>{alert(err.response.data)})
-       
+      const result = await EditSupplierDatabase(body)
+      alert(result) 
     }
 
     return (
@@ -91,23 +86,13 @@ export default function UpdateSupplier({id, supplier}:UpdateProps) {
                           className=" text-center text-black text-sm my-4"
                       />
                       <Input
-                          value={email}
-                          onChange={(ev)=>{setEmail(ev.target.value)}}
-                          placeholder="Email"
-                          className=" text-center text-black text-sm my-4"
-                      />
-                      <Input
                           value={contact}
                           onChange={(ev)=>{setContact(ev.target.value)}}
                           placeholder="Contato"
                           className=" text-center text-black text-sm my-4"
-                      />
-                      <Input
-                          value={cnpj}
-                          onChange={(ev)=>{setCnpj(ev.target.value)}}
-                          placeholder="Contato"
-                          className=" text-center text-black text-sm my-4"
-                      />
+                          />
+                      <span className=" text-sm my-2">Email: {supplier.email}</span>
+                      <span className=" text-sm my-2">CNPJ: {supplier.cnpj}</span>
                   </div>
                   <div className="w-full flex justify-center">
                       <Button className="w-64">Confirmar</Button>

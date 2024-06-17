@@ -10,10 +10,9 @@ import {
     DialogTrigger,
   } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input";
-import axios from "axios";
 import { useState } from "react";
-import { BASE_URL } from "../../_Constants/URL";
 import { useSession } from "next-auth/react";
+import AddSuppliersDatabase from "@/app/Suppliers/Actions/AddSuppliers";
   
 
 export default function AddSupplier() {
@@ -29,20 +28,14 @@ export default function AddSupplier() {
     const addSupplier= async (ev:any)=>{
         ev.preventDefault()
 
-        const body = {
-            supplier:supplierName,
+        const result = await AddSuppliersDatabase({
             address,
-            email,
+            cnpj,
             contact,
-            cnpj
-        }
-
-        axios
-            .post(`${BASE_URL}suppliers/create/userID/${session.data?.user.id}`, body)
-            .then((res)=>{
-                alert(res.data.message)
-            })
-            .catch((err)=>{alert(err.response.data)})
+            email,
+            supplier:supplierName
+        })
+       alert(result)
     }
 
     return (
@@ -77,7 +70,7 @@ export default function AddSupplier() {
                     <Input
                         value={cnpj}
                         onChange={(ev)=>{setCnpj(ev.target.value)}}
-                        placeholder="Email"
+                        placeholder="CNPJ"
                         className=" text-center text-black text-sm my-4"
                     />
                     <Input

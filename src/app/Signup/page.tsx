@@ -2,36 +2,44 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { BASE_URL } from "../_Constants/URL";
+import AddUserDatabase from "./Actions/addUser";
 
 export default function SignUp() {
 
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [confirmPass, setConfirmPass] = useState("")
 
     const router = useRouter()
 
-    const signup = (ev:any)=>{
+    const signup = async (ev:any)=>{
         ev.preventDefault()
 
         const body = {
             name,
             email,
-            password
+            password,
+            confirmPass
         }
 
-        axios
-            .post(`${BASE_URL}users/create`, body)
-            .then((res)=>{
-                alert(res.data.message)
-                router.push("/")
-            })
-            .catch((err)=>{console.log(err)})
+        const result = await AddUserDatabase(body)
+        
+        if(result.status === "Success"){
+            alert(result.message)
+            router.push("/")
+
+            setName("")
+            setEmail("")
+            setPassword("")
+            setConfirmPass("")
+        } else{
+            alert(result.message)
+        }
+
     }
 
     return (
@@ -60,6 +68,13 @@ export default function SignUp() {
                         type="password"
                         value={password}
                         onChange={(ev)=>{setPassword(ev.target.value)}}
+                    />
+                    <Input
+                        className="w-72 h-8 my-4"
+                        placeholder="Confirme sua senha"
+                        type="password"
+                        value={confirmPass}
+                        onChange={(ev)=>{setConfirmPass(ev.target.value)}}
                     />
                     <div className="flex flex-col">
                         <Button className="my-2">Confirmar</Button>

@@ -14,6 +14,7 @@ import axios from "axios";
 import { useState } from "react";
 import { BASE_URL } from "../../_Constants/URL";
 import { useSession } from "next-auth/react";
+import AddClientDatabase from "@/app/Clients/Actions/addClient";
   
 
 export default function AddClient() {
@@ -24,24 +25,22 @@ export default function AddClient() {
     const [address, setAddress ] = useState<string>("")
     const [email, setEmail ] = useState<string>("")
     const [contact, setContact ] = useState<string>("")
+    const [cpf, setCPF ] = useState<string>("")
 
     const addClient = async (ev:any)=>{
         ev.preventDefault()
 
         const body = {
-            name:fullName,
+            fullName,
             address,
             email,
-            contact
+            contact,
+            CPF:cpf
         }
 
-        axios
-            .post(`${BASE_URL}clients/create/userID/${session.data?.user.id}`, body)
-            .then((res)=>{
-                alert(res.data.message)
-            })
-            .catch((err)=>{alert(err.response.data)})
-            .catch((err)=>{console.log(err.response)})
+        const result = await AddClientDatabase(body)
+        alert(result)
+      
     }
 
     return (
@@ -65,6 +64,14 @@ export default function AddClient() {
                         value={address}
                         onChange={(ev)=>{setAddress(ev.target.value)}}
                         placeholder="Endereço"
+                        className=" text-center text-black text-sm my-4"
+                    />
+                    <Input
+                        value={cpf}
+                        onChange={(ev)=>{setCPF(ev.target.value)}}
+                        placeholder="CPF"
+                        minLength={11}
+                        maxLength={11}
                         className=" text-center text-black text-sm my-4"
                     />
                     <Input

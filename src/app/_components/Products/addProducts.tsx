@@ -13,6 +13,7 @@ import axios from "axios";
 import { useState } from "react";
 import { BASE_URL } from "../../_Constants/URL";
 import { useSession } from "next-auth/react";
+import AddProductsDatabase from "@/app/Products/Actions/AddProducts";
 
 export interface PageProps{
     page?: boolean
@@ -30,24 +31,21 @@ export default function AddProducts({page}:PageProps) {
     const sendAddProduct = async (ev:any)=>{
         ev.preventDefault()
 
-        const body = {
-            product,
-            productPrice:price
+        try {
+            
+            if (!product) throw new Error("Nome do produto não inserido!")
+            if (!price) throw new Error("Valor do produto não inserido!")
+            if(isNaN(price)) throw new Error("No valor do produto, será aceito somente numeros!");
+            if(product.length < 2) throw new Error("Nome do produto precisa contér no minimo dois caracteres!");
+            
+            
+            
+            await AddProductsDatabase({price, product})
+            alert("produto cadastrado com sucesso!")
+        } catch (error:any) {
+            alert(error.message)
         }
-
-        axios
-            .post(`${BASE_URL}products/addproducts/userID/${session.data?.user.id}`, body)
-            .then((res)=>{
-                alert(res.data)
-            })
-            .catch((err)=>{
-                alert(err.response.data)
-            })
-            
-        setProduct("")
-        setPrice(0)
-            
-}
+    }
 
 
  return (

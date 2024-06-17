@@ -1,5 +1,3 @@
-"use client"
-
 import Header from "../_components/header";
 import {
     Table,
@@ -10,18 +8,18 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table"
-import useRequestData from "../_hooks/useRequestData";
-import { BASE_URL } from "../_Constants/URL";
 import CardAuditMobile from "../_components/Audit/CardAuditMobile";
+import { db } from "../_lib/prisma";
 
-export default function AuditLog() {
+export default async function AuditLog() {
 
-    const [auditLog] = useRequestData(`${BASE_URL}auditLog/getall`)
-    
+    const getAudits = await db.auditLog.findMany({
+        orderBy:{
+            cod_audit:"desc"
+        }
+    })
 
-    const showAudit = auditLog.map((audit:any, key:number)=>{
-
-    
+    const showAudit = getAudits.map((audit:any, key:number)=>{
         return(
             <TableRow key={key}>
                 <TableCell className="font-medium">{audit.cod_audit}</TableCell>
@@ -32,7 +30,7 @@ export default function AuditLog() {
         )
     })
 
-    const showAuditMobile = auditLog.map((audit:any, key:number)=>{
+    const showAuditMobile = getAudits.map((audit:any, key:number)=>{
         return(
             <CardAuditMobile
                 audit={audit}

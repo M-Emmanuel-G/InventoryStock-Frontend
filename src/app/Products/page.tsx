@@ -1,11 +1,7 @@
-"use client"
-
 import AddProducts from "../_components/Products/addProducts";
 import DialogDelete from "../_components/Products/dialogDelete";
 import EditProduct from "../_components/Products/drawerEdit";
 import Header from "../_components/header";
-import { BASE_URL } from "../_Constants/URL";
-import useRequestData from "../_hooks/useRequestData";
 import {
     Table,
     TableBody,
@@ -16,16 +12,20 @@ import {
     TableRow,
   } from "@/components/ui/table"
 import CardProdMobile from "../_components/Products/CardProductMobile";
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { db } from "../_lib/prisma";
+import { Products } from "@prisma/client";
   
 
-export default function Products() {
+export default async function Products() {
 
-    const [ Products ] = useRequestData(`${BASE_URL}Products/getallproducts`)
-    const [ search, setSearch ] = useState<string>("")
+    const getProducts = await db.products.findMany({
+        orderBy:{
+            cod_product:"desc"
+        }
+    })
     
-    const showProducts = Products.filter((prod:any)=>{ return prod.product.includes(search)}).map((prod:any, key:number)=>{
+    
+    const showProducts = getProducts.filter((prod:any)=>{ return prod.product.includes("")}).map((prod:Products, key:number)=>{
         
         return(
             <TableRow key={key}>
@@ -34,11 +34,15 @@ export default function Products() {
                 <TableCell>{prod.product}</TableCell>
                 <TableCell>{prod.qtd_stock} unit.</TableCell>
                 <TableCell>R$ {Number(prod.price).toFixed(2)}</TableCell>
-                <TableCell>R$ {Number(prod.price * prod.sales_percentage).toFixed(2)}</TableCell>
+                <TableCell>R$ {Number(prod.price) * Number(prod.sales_percentage)}</TableCell>
 
                 <TableCell className="text-right">
                     <EditProduct
                         id={prod.id}
+                        product={prod.product}
+                        percentage={Number(prod.sales_percentage)}
+                        qtd={prod.qtd_stock}
+                        price={Number(prod.price)}
                         
                     />
                     <DialogDelete
@@ -49,12 +53,17 @@ export default function Products() {
         )
     })
 
-    const showProductsMobile = Products.filter((prod:any)=>{ return prod.product.includes(search)}).map((prod:any, key:number)=>{
+    const showProductsMobile = getProducts.filter((prod:any)=>{ return prod.product.includes("")}).map((prod:Products, key:number)=>{
         return(
             <CardProdMobile
                 key={key}
-                prod={prod}
+                cod_product={prod.cod_product}
+                percentage={Number(prod.sales_percentage)}
+                product={prod.product}
+                price={Number(prod.price)}
+                qtd_stock={Number(prod.qtd_stock)}
                 productID={prod.id}
+                entry_time={prod.entry_time}
             />
         )
     })
@@ -64,12 +73,12 @@ export default function Products() {
             <Header/>
             <section className="w-full h-[90%] flex-col">
                 <section className="w-full h-[10%] flex items-center justify-end">
-                    <Input
+                    {/* <Input
                         className="w-64 h-8 ml-12"
                         placeholder="Buscar..."
                         value={search}
                         onChange={(ev)=>{setSearch(ev.target.value)}}
-                    />
+                    /> */}
                     <AddProducts/>
                 </section>
                 <section className="hidden sm:flex">

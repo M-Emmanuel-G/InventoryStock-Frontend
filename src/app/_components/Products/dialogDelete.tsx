@@ -13,8 +13,7 @@ import {
   } from "@/components/ui/alert-dialog"
 import { Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
-import axios from "axios";
-import { BASE_URL } from "../../_Constants/URL";
+import RemoveProductDatabase from "@/app/Products/Actions/RemoveProduct";
 
   interface DeleteProps{
     id:string
@@ -24,12 +23,16 @@ import { BASE_URL } from "../../_Constants/URL";
 
     const session = useSession()
    
-    const delProduct = ()=>{
-        axios.delete(`${BASE_URL}products/removeProduct/${id}/userID/${session.data?.user.id}`)
-            .then((res)=>{
-                alert(res.data)
+    const delProduct = async ()=>{
+        try {
+            await RemoveProductDatabase({
+                id
             })
-            .catch((err)=>{alert(err.response.data)})
+
+            alert("Produto excluido com sucesso!")
+        } catch (error:any) {
+            alert(error.message);
+        }
     }
    
     return (

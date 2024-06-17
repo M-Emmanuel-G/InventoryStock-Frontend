@@ -1,4 +1,3 @@
-"use client"
 
 import { BASE_URL } from "../_Constants/URL";
 import SaveOutput from "../_components/StockOutput/addStockOutputs";
@@ -15,12 +14,18 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table"
+import { db } from "../_lib/prisma";
 
-export default function StockOut() {
+export default async function StockOut() {
 
-    const [ data ] = useRequestData(`${BASE_URL}outputs/getalloutputs`)
+   const getStockOuts = await db.outputProducts.findMany({
+    include:{
+        clients:true,
+        products:true
+    }
+   })
 
-    const showStockOutputs = data.map((out:any, key:number)=>{
+    const showStockOutputs = getStockOuts.map((out:any, key:number)=>{
         return(
             <TableRow key={key}>
                 <TableCell className="font-medium">{out.cod_output}</TableCell>
@@ -32,7 +37,7 @@ export default function StockOut() {
         )
     })
 
-    const showStockOutputsMobile = data.map((out:any, key:number)=>{
+    const showStockOutputsMobile = getStockOuts.map((out:any, key:number)=>{
         return(
             <CardOutputMobile
                 key={key}
